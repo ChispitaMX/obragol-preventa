@@ -1,33 +1,19 @@
 
-document.addEventListener("DOMContentLoaded", () => {
-    const input = document.getElementById("usdtInput");
-    const output = document.getElementById("tokenOutput");
-    const connectBtn = document.getElementById("connectBtn");
-    const walletStatus = document.getElementById("walletStatus");
+document.getElementById('usdtInput').addEventListener('input', function () {
+    const usdt = parseFloat(this.value);
+    const tokens = usdt / 0.001;
+    document.getElementById('tokenOutput').innerText = `Recibirás ${tokens.toLocaleString()} OBRAGOL tokens.`;
+});
 
-    const precioPorToken = 0.001;
-
-    input.addEventListener("input", () => {
-        const usdt = parseFloat(input.value);
-        if (!isNaN(usdt) && usdt > 0) {
-            const tokens = usdt / precioPorToken;
-            output.textContent = `Recibirás ${tokens.toLocaleString()} OBRAGOL tokens.`;
-        } else {
-            output.textContent = "";
-        }
-    });
-
-    connectBtn.addEventListener("click", async () => {
+document.getElementById('connectButton').addEventListener('click', async () => {
+    if (window.solana && window.solana.isPhantom) {
         try {
-            const provider = window.phantom?.solana;
-            if (provider && provider.isPhantom) {
-                const resp = await provider.connect();
-                walletStatus.textContent = "OBRAGOL Token está solicitando autorización para conectarse";
-            } else {
-                walletStatus.textContent = "Solflare no está disponible. Instala la wallet Phantom.";
-            }
+            const resp = await window.solana.connect();
+            document.getElementById('status').innerText = 'OBRAGOL Token está solicitando autorización para conectarse';
         } catch (err) {
-            walletStatus.textContent = "Conexión rechazada.";
+            console.error('Conexión rechazada', err);
         }
-    });
+    } else {
+        alert("Phantom Wallet no está instalada.");
+    }
 });
