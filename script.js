@@ -1,10 +1,17 @@
-function calcularTokens() {
-    const cantidad = parseFloat(document.getElementById("usdt").value);
-    const precioToken = 0.0001;
-    if (!isNaN(cantidad)) {
-        const tokens = cantidad / precioToken;
-        document.getElementById("resultado").innerText = `Recibirás ${tokens.toLocaleString()} OBRAGOL tokens.`;
+
+document.addEventListener("DOMContentLoaded", function () {
+  const inputUSDT = document.getElementById("usdtInput");
+  const tokenOutput = document.getElementById("tokenOutput");
+
+  const pricePerToken = 0.001;
+
+  inputUSDT.addEventListener("input", () => {
+    const usdtAmount = parseFloat(inputUSDT.value);
+    if (!isNaN(usdtAmount)) {
+      const tokens = usdtAmount / pricePerToken;
+      tokenOutput.textContent = `Recibirás ${tokens.toLocaleString()} OBRAGOL tokens.`;
     } else {
-        document.getElementById("resultado").innerText = "";
+      tokenOutput.textContent = "";
     }
-}
+  });
+});
