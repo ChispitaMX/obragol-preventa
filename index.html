@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Preventa OBRAGOL Token</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
     <h1>¡Bienvenido a la preventa de OBRAGOL Token!</h1>
-    <p>Precio por token: 0.00005 USDT</p>
-    <input type="number" id="usdtInput" placeholder="Ingresa la cantidad en USDT">
-    <button onclick="calcularTokens()">Calcular tokens</button>
+    <p>Precio por token: 0.0001 USDT</p>
+    <input type="number" id="usdt" placeholder="Ingresa la cantidad en USDT" oninput="calcularTokens()" />
     <p id="resultado"></p>
     <script src="script.js"></script>
 </body>
