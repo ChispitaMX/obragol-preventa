@@ -1,39 +1,23 @@
 
 body {
-    margin: 0;
-    padding: 0;
     background-color: #800000;
-    font-family: Arial, sans-serif;
     color: white;
+    font-family: Arial, sans-serif;
     text-align: center;
-    position: relative;
-}
-.background-image {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 80%;
-    opacity: 0.15;
-    transform: translate(-50%, -50%);
-    z-index: 0;
-}
-.container {
-    position: relative;
-    z-index: 1;
-    padding: 30px;
-}
-input, button {
-    padding: 10px;
-    margin: 10px;
-    font-size: 16px;
+    padding: 20px;
+    background-image: url('obragol-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 .flag {
-    width: 40px;
     position: absolute;
     top: 10px;
     left: 10px;
+    width: 80px;
 }
-.thankyou {
+.note {
     margin-top: 20px;
-    font-weight: bold;
+    font-size: 1.2em;
+    color: #ffcc00;
 }
