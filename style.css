@@ -1,23 +1,5 @@
-
-body {
-    background-color: #800000;
-    color: white;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 20px;
-    background-image: url('obragol-bg.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-.flag {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    width: 80px;
-}
-.note {
-    margin-top: 20px;
-    font-size: 1.2em;
-    color: #ffcc00;
-}
+body { background: #5a1e2a; color: #fff; font-family: sans-serif; padding: 20px; }
+h1 { text-align: center; font-size: 2.5em; margin-bottom: 10px; }
+.flag { width: 40px; position: absolute; top: 15px; right: 15px; }
+.welcome, .double, .thanks { text-align: center; margin: 10px 0; }
+.presale-info { background: #731c2e; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
