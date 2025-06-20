@@ -3,50 +3,28 @@ body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-  background-color: #800000;
-  color: white;
+  background: #111;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+}
+.container {
   text-align: center;
 }
-
-.background-image {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('obragol_watermark.png') no-repeat center center fixed;
-  background-size: cover;
-  opacity: 0.08;
-  z-index: -1;
+.contador {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
 }
-
-.flag {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  width: 50px;
+.contador div {
+  background: #222;
+  padding: 20px;
+  border-radius: 10px;
 }
-
-.content {
-  padding: 100px 20px;
-}
-
-button {
-  margin: 20px;
-  padding: 15px 25px;
-  font-size: 16px;
-  background-color: #ffffff;
-  color: #800000;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #f0f0f0;
-}
-
-.footer {
-  margin-top: 50px;
-  font-weight: bold;
+.contador span {
+  font-size: 2em;
+  display: block;
 }

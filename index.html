@@ -1,23 +1,22 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OBRAGOL Presale</title>
-  <link rel="stylesheet" href="style.css" />
-  <script type="module" src="script.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contador OBRAGOL</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="background-image"></div>
-  <div class="content">
-    <img src="obragol_flag.png" alt="Mexican Flag" class="flag" />
-    <h1>Welcome to the OBRAGOL Token presale, Mexico's strongest cryptocurrency</h1>
-    <p>Presale Price: <strong>0.001 USDT</strong></p>
-    <p>Listing Price: <strong>0.002 USDT</strong></p>
-    <button id="connectWallet">Connect Wallet</button>
-    <button id="buyToken">Buy OBRAGOL Token</button>
-    <p class="footer">Thanks for supporting OBRAGOL TOKEN, Mexico’s strongest cryptocurrency!</p>
+  <div class="container">
+    <h1>¡Lanzamiento de OBRAGOL Token!</h1>
+    <div class="contador">
+      <div><span id="dias">00</span><p>Días</p></div>
+      <div><span id="horas">00</span><p>Horas</p></div>
+      <div><span id="minutos">00</span><p>Min</p></div>
+      <div><span id="segundos">00</span><p>Seg</p></div>
+    </div>
   </div>
+  <script src="script.js"></script>
 </body>
 </html>

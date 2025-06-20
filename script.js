@@ -1,56 +1,26 @@
 
-import { Connection, PublicKey, Transaction, SystemProgram } from "@solana/web3.js";
+// Fecha objetivo (puedes cambiarla)
+const fechaObjetivo = new Date("2025-07-01T00:00:00").getTime();
 
-const connectBtn = document.getElementById('connectWallet');
-const buyBtn = document.getElementById('buyToken');
+const diasSpan = document.getElementById("dias");
+const horasSpan = document.getElementById("horas");
+const minutosSpan = document.getElementById("minutos");
+const segundosSpan = document.getElementById("segundos");
 
-let wallet = null;
+function actualizarContador() {
+  const ahora = new Date().getTime();
+  const diferencia = fechaObjetivo - ahora;
 
-connectBtn.addEventListener('click', async () => {
-  if ('solana' in window) {
-    const provider = window.solana;
-    try {
-      const res = await provider.connect();
-      wallet = provider;
-      alert('OBRAGOL Token is requesting permission to connect!');
-    } catch (err) {
-      console.error('Connection error', err);
-    }
-  } else {
-    alert('Solana wallet not found. Install Phantom or Solflare.');
-  }
-});
+  const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+  const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+  const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
 
-buyBtn.addEventListener('click', async () => {
-  if (!wallet || !wallet.publicKey) {
-    alert('Connect wallet first!');
-    return;
-  }
+  diasSpan.textContent = dias.toString().padStart(2, '0');
+  horasSpan.textContent = horas.toString().padStart(2, '0');
+  minutosSpan.textContent = minutos.toString().padStart(2, '0');
+  segundosSpan.textContent = segundos.toString().padStart(2, '0');
+}
 
-  const connection = new Connection("https://api.mainnet-beta.solana.com");
-  const recipient = new PublicKey("8W2ogqdvFSvDfQitX2JyyiCX6hqehZWvrpWTkkYCHGPm"); // Preventa wallet
-  const sender = wallet.publicKey;
-
-  const transaction = new Transaction().add(
-    SystemProgram.transfer({
-      fromPubkey: sender,
-      toPubkey: recipient,
-      lamports: 1000000 // 1 USDT in lamports assuming 6 decimals
-    })
-  );
-
-  try {
-    const { blockhash } = await connection.getRecentBlockhash();
-    transaction.recentBlockhash = blockhash;
-    transaction.feePayer = sender;
-
-    const signed = await wallet.signTransaction(transaction);
-    const signature = await connection.sendRawTransaction(signed.serialize());
-    await connection.confirmTransaction(signature);
-
-    alert("Thanks for supporting OBRAGOL! Transaction submitted.");
-  } catch (err) {
-    console.error("Transaction failed", err);
-    alert("Transaction failed. Try again.");
-  }
-});
+actualizarContador();
+setInterval(actualizarContador, 1000);
