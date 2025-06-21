@@ -24,14 +24,7 @@ script src="https://cdnjs.cloudflare.com/ajax/libs/@solana/web3.js/1.73.3/web3.m
 <p>Cantidad de OBRAGOL que recibirás terminando la preventa:</p>
 <p id="obrAmount">0</p>
     <button id="buyToken">Buy OBRAGOL Token</button>
-// Actualizar cantidad de OBRAGOL en tiempo real
-amountInput.addEventListener("input", () => {
-  const obrSpan = document.getElementById("obrAmount");
-  const usdtValue = parseFloat(amountInput.value);
-  if (!isNaN(usdtValue) && usdtValue > 0) {
-    obrSpan.textContent = (usdtValue / 0.002).toLocaleString();
-  } else {
-    obrSpan.textContent = "0";
+
   }
 });
     <div class="contador">
