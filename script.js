@@ -1,79 +1,107 @@
 // Fecha objetivo del contador
-const fechaObjetivo = new Date("2025-07-01T00:00:00").getTime();
+const targetDate = new Date("2025-07-01T00:00:00").getTime();
+const daysSpan = document.getElementById("dias");
+const hoursSpan = document.getElementById("horas");
+const minutesSpan = document.getElementById("minutos");
+const secondsSpan = document.getElementById("segundos");
 
-const diasSpan = document.getElementById("dias");
-const horasSpan = document.getElementById("horas");
-const minutosSpan = document.getElementById("minutos");
-const segundosSpan = document.getElementById("segundos");
+function updateCountdown() {
+  const now = new Date().getTime();
+  const distance = targetDate - now;
 
-setInterval(() => {
-  const ahora = new Date().getTime();
-  const tiempoRestante = fechaObjetivo - ahora;
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-  const dias = Math.floor(tiempoRestante / (1000 * 60 * 60 * 24));
-  const horas = Math.floor((tiempoRestante % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutos = Math.floor((tiempoRestante % (1000 * 60 * 60)) / (1000 * 60));
-  const segundos = Math.floor((tiempoRestante % (1000 * 60)) / 1000);
+  daysSpan.textContent = String(days).padStart(2, '0');
+  hoursSpan.textContent = String(hours).padStart(2, '0');
+  minutesSpan.textContent = String(minutes).padStart(2, '0');
+  secondsSpan.textContent = String(seconds).padStart(2, '0');
+}
 
-  diasSpan.textContent = dias;
-  horasSpan.textContent = horas;
-  minutosSpan.textContent = minutos;
-  segundosSpan.textContent = segundos;
-}, 1000);
+setInterval(updateCountdown, 1000);
+updateCountdown();
 
-// Conectar wallet
+// Dirección de recepción (Solflare)
+const recipientAddress = "8W2ogqdvFSvDfQitX2JyyiCX6hqehZWvrpWTkkYCHGPm";
+
+// ID del token USDT SPL en Solana (stablecoin real)
+const usdtMintAddress = "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB";
+
 let provider = null;
-const connectButton = document.getElementById("connectWallet");
 
-connectButton.addEventListener("click", async () => {
-  if (window.solana && window.solana.isPhantom) {
+document.getElementById("connectWallet").addEventListener("click", async () => {
+  if ("solana" in window) {
+    provider = window.solana;
     try {
-      const resp = await window.solana.connect();
-      provider = window.solana;
-      alert("Wallet conectada: " + resp.publicKey.toString());
+      await provider.connect();
+      alert("Wallet conectada exitosamente: " + provider.publicKey.toString());
     } catch (err) {
-      console.error("Error al conectar wallet:", err);
+      console.error(err);
+      alert("Error al conectar wallet.");
     }
   } else {
-    alert("Phantom Wallet no detectada. Por favor instálala.");
+    alert("Phantom o Solflare no detectado. Instálalo para continuar.");
   }
 });
 
-// Comprar token
-const buyButton = document.getElementById("buyToken");
-buyButton.addEventListener("click", async () => {
-  if (!provider) {
-    alert("Conecta primero tu wallet.");
+document.getElementById("buyToken").addEventListener("click", async () => {
+  const amountInput = document.getElementById("usdtAmount");
+  const amount = parseFloat(amountInput.value);
+
+  if (!provider || !provider.publicKey) {
+    alert("Primero conecta tu wallet.");
     return;
   }
 
-  const usdtAmount = document.getElementById("usdtAmount").value;
-  if (!usdtAmount || isNaN(usdtAmount) || usdtAmount <= 0) {
-    alert("Ingresa una cantidad válida de USDT.");
+  if (!amount || amount <= 0) {
+    alert("Ingresa un monto válido de USDT.");
     return;
   }
-
-  const receiverAddress = "8W2ogqdvFSvDfQitX2JyyiCX6hqehZWvrpWTkkYCHGPm"; // Wallet Solflare
 
   try {
-    const transaction = new solanaWeb3.Transaction().add(
-      solanaWeb3.SystemProgram.transfer({
-        fromPubkey: provider.publicKey,
-        toPubkey: new solanaWeb3.PublicKey(receiverAddress),
-        lamports: usdtAmount * 1_000_000, // Simulación en lamports, ajustar según implementación real de USDT
-      })
+    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl("mainnet-beta"), "confirmed");
+    const senderPublicKey = provider.publicKey;
+    const recipientPublicKey = new solanaWeb3.PublicKey(recipientAddress);
+    const usdtMint = new solanaWeb3.PublicKey(usdtMintAddress);
+
+    const senderTokenAccounts = await connection.getTokenAccountsByOwner(senderPublicKey, {
+      mint: usdtMint
+    });
+
+    if (senderTokenAccounts.value.length === 0) {
+      alert("No se encontró una cuenta de USDT en tu wallet.");
+      return;
+    }
+
+    const senderTokenAccount = senderTokenAccounts.value[0].pubkey;
+
+    // Verificar o crear la cuenta asociada del receptor
+    const recipientTokenAccount = await splToken.getOrCreateAssociatedTokenAccount(
+      connection,
+      provider,
+      usdtMint,
+      recipientPublicKey
     );
 
-    let { blockhash } = await provider.connection.getRecentBlockhash();
-    transaction.recentBlockhash = blockhash;
-    transaction.feePayer = provider.publicKey;
+    const tx = new solanaWeb3.Transaction().add(
+      splToken.createTransferInstruction(
+        senderTokenAccount,
+        recipientTokenAccount.address,
+        senderPublicKey,
+        amount * 10 ** 6, // USDT tiene 6 decimales
+        [],
+        splToken.TOKEN_PROGRAM_ID
+      )
+    );
 
-    const signed = await provider.signTransaction(transaction);
-    const signature = await provider.connection.sendRawTransaction(signed.serialize());
+    const signature = await provider.signAndSendTransaction(tx);
+    await connection.confirmTransaction(signature, "confirmed");
 
-    alert("Compra realizada. Tx ID: " + signature);
-  } catch (err) {
-    console.error("Error al realizar la transacción:", err);
+    alert("¡Compra realizada! TX ID: " + signature);
+  } catch (error) {
+    console.error(error);
     alert("Fallo la transacción.");
   }
 });
