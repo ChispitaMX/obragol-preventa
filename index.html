@@ -14,23 +14,34 @@
     <strong>Precio de lista:</strong> 0.004 USDT<br>
     ¡Tus ganancias se multiplican!</p>
 
-    <button id="connectWallet">Conectar Wallet</button>
+    <button id="connectWallet">ConnectWallet</button>
 
     <p>Precio por token: 0.002 USDT</p>
-    <input type="number" id="usdtAmount" placeholder="Monto en USDT" />
-
-    <button id="buyToken">Comprar OBRAGOL Token</button>
-
+    <input type="number" id="usdtAmount" placeholder="USDT Amount"/>
+<input type="number" id="usdtAmount" placeholder="Ingresa cantidad de USDT">
+<p>Cantidad de OBRAGOL que recibirás terminando la preventa:</p>
+<p id="obrAmount">0</p>
+    <button id="buyToken">Buy OBRAGOL Token</button>
+// Actualizar cantidad de OBRAGOL en tiempo real
+amountInput.addEventListener("input", () => {
+  const obrSpan = document.getElementById("obrAmount");
+  const usdtValue = parseFloat(amountInput.value);
+  if (!isNaN(usdtValue) && usdtValue > 0) {
+    obrSpan.textContent = (usdtValue / 0.002).toLocaleString();
+  } else {
+    obrSpan.textContent = "0";
+  }
+});
     <div class="contador">
-      <div><span id="dias">00</span><p>Días</p></div>
+      <div><span id="dias">60</span><p>Días</p></div>
       <div><span id="horas">00</span><p>Horas</p></div>
       <div><span id="minutos">00</span><p>Min</p></div>
       <div><span id="segundos">00</span><p>Seg</p></div>
     </div>
   </div>
-<script src="https://unpkg.com/@solana/web3.js@1.75.0/lib/index.iife.min.js"></script>
+
+  <script src="https://unpkg.com/@solana/web3.js@1.75.0/lib/index.iife.min.js"></script>
 <script src="https://unpkg.com/@solana/spl-token@0.3.5/lib/index.iife.min.js"></script>
 <script src="script.js"></script>
-  
 </body>
 </html>
